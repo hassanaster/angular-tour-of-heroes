@@ -9,6 +9,7 @@ import { HeroesComponent } from './heroes/heroes.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 
 import { MessagesComponent } from './messages/messages.component';
+import { AppRoutingModule } from './/app-routing.module';
 
 
 @NgModule({
@@ -19,7 +20,7 @@ import { MessagesComponent } from './messages/messages.component';
     MessagesComponent
   ],
   imports: [
-    BrowserModule, FormsModule
+    BrowserModule, FormsModule, AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
