@@ -43,6 +43,7 @@ export class HeroService
 
 	 /** GET heroes from the server */
 	getHeroes (): Observable<Hero[]> {
+		this.heroesUrl = 'http://localhost:8080/tourofheroes/listar';
   		return this.http.get<Hero[]>(this.heroesUrl)
    		.pipe(
       		tap(heroes => this.log('fetched heroes')),
@@ -52,6 +53,7 @@ export class HeroService
  
   	 /** GET hero by id. Will 404 if id not found */
 	  getHero(id: number): Observable<Hero> {
+		this.heroesUrl = 'http://localhost:8080/tourofheroes/consultar';
   		const url = `${this.heroesUrl}/${id}`;
   		return this.http.get<Hero>(url).pipe(
    		 tap(_ => this.log(`fetched hero id=${id}`)),
@@ -70,6 +72,10 @@ export class HeroService
 
 	/** PUT: update the hero on the server */
 	updateHero (hero: Hero): Observable<any> {
+		this.heroesUrl = 'http://localhost:8080/tourofheroes/actualizar';
+		const id = typeof hero === 'number' ? hero : hero.id;
+  		const url = `${this.heroesUrl}/${id}`;
+
   		return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
     			tap(_ => this.log(`updated hero id=${hero.id}`)),
     			catchError(this.handleError<any>('updateHero'))
@@ -78,6 +84,7 @@ export class HeroService
 	
 	/** POST: add a new hero to the server */
 	addHero (hero: Hero): Observable<Hero> {
+		this.heroesUrl = 'http://localhost:8080/tourofheroes/crear';
   		return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
     			tap((hero: Hero) => this.log(`added hero w/ id=${hero.id}`)),
     			catchError(this.handleError<Hero>('addHero'))
@@ -85,6 +92,7 @@ export class HeroService
         }
 	/** DELETE: delete the hero from the server */
 	deleteHero (hero: Hero | number): Observable<Hero> {
+		this.heroesUrl = 'http://localhost:8080/tourofheroes/borrar';
   		const id = typeof hero === 'number' ? hero : hero.id;
   		const url = `${this.heroesUrl}/${id}`;
 
@@ -98,7 +106,8 @@ export class HeroService
   		if (!term.trim()) {
    		 // if not search term, return empty hero array.
     		return of([]);
-  		}
+		  }
+		  this.heroesUrl = 'http://localhost:8080/tourofheroes/buscar';
   		return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
     		tap(_ => this.log(`found heroes matching "${term}"`)),
     		catchError(this.handleError<Hero[]>('searchHeroes', []))
